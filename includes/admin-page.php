@@ -24,12 +24,30 @@ function eer_display_single_report($report) {
             <div class="postbox">
                 <h2 class="hndle"><span>General Information</span></h2>
                 <div class="inside">
-                    <p><strong>Subject:</strong> <?php echo esc_html($report->subject); ?></p>
-                    <p><strong>Professional:</strong> <?php echo esc_html($report->professional); ?></p>
-                    <p><strong>Exam Period:</strong> <?php echo esc_html($report->exam_period); ?></p>
-                    <p><strong>Start Date:</strong> <?php echo esc_html($report->start_date); ?></p>
-                    <p><strong>End Date:</strong> <?php echo esc_html($report->end_date); ?></p>
-                    <p><strong>Submitted At:</strong> <?php echo esc_html($report->submitted_at); ?></p>
+                    <table class="widefat striped">
+                        <tbody>
+                            <tr>
+                                <td style="width: 200px;"><strong>Subject</strong></td>
+                                <td><?php echo esc_html($report->subject); ?></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Professional</strong></td>
+                                <td><?php echo esc_html($report->professional); ?></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Exam Period</strong></td>
+                                <td><?php echo esc_html($report->exam_period); ?></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dates</strong></td>
+                                <td><?php echo esc_html($report->start_date); ?> to <?php echo esc_html($report->end_date); ?></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Submitted At</strong></td>
+                                <td><?php echo esc_html($report->submitted_at); ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -39,12 +57,25 @@ function eer_display_single_report($report) {
             <div class="postbox">
                 <h2 class="hndle"><span>(a) Formative Assessment</span></h2>
                 <div class="inside">
-                    <?php foreach ($fa_questions as $key => $label): if(isset($report->$key)) : ?>
-                        <p><strong><?php echo esc_html($label); ?>:</strong> <?php echo eer_get_rating_label($report->$key); ?></p>
-                    <?php endif; endforeach; ?>
-                    <hr>
+                    <table class="widefat striped">
+                        <thead>
+                            <tr>
+                                <th>Criteria</th>
+                                <th style="width: 200px;">Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($fa_questions as $key => $label): if(isset($report->$key)) : ?>
+                                <tr>
+                                    <td><?php echo esc_html($label); ?></td>
+                                    <td><?php echo eer_get_rating_label($report->$key); ?></td>
+                                </tr>
+                            <?php endif; endforeach; ?>
+                        </tbody>
+                    </table>
+                    <br>
                     <p><strong>Improvements:</strong></p>
-                    <p><?php echo nl2br(esc_html($report->fa_improvement)); ?></p>
+                    <div style="background: #fff; border: 1px solid #ccd0d4; padding: 10px;"><?php echo nl2br(esc_html($report->fa_improvement)); ?></div>
                 </div>
             </div>
 
@@ -52,12 +83,25 @@ function eer_display_single_report($report) {
             <div class="postbox">
                 <h2 class="hndle"><span>(b) Quality of Summative Assessments</span></h2>
                 <div class="inside">
-                    <?php foreach ($ap_questions as $key => $label): if(isset($report->$key)) : ?>
-                        <p><strong><?php echo esc_html($label); ?>:</strong> <?php echo eer_get_rating_label($report->$key); ?></p>
-                    <?php endif; endforeach; ?>
-                    <hr>
+                    <table class="widefat striped">
+                        <thead>
+                            <tr>
+                                <th>Criteria</th>
+                                <th style="width: 200px;">Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($ap_questions as $key => $label): if(isset($report->$key)) : ?>
+                                <tr>
+                                    <td><?php echo esc_html($label); ?></td>
+                                    <td><?php echo eer_get_rating_label($report->$key); ?></td>
+                                </tr>
+                            <?php endif; endforeach; ?>
+                        </tbody>
+                    </table>
+                    <br>
                     <p><strong>Improvements:</strong></p>
-                    <p><?php echo nl2br(esc_html($report->ap_improvement)); ?></p>
+                    <div style="background: #fff; border: 1px solid #ccd0d4; padding: 10px;"><?php echo nl2br(esc_html($report->ap_improvement)); ?></div>
                 </div>
             </div>
 
@@ -65,31 +109,70 @@ function eer_display_single_report($report) {
             <div class="postbox">
                 <h2 class="hndle"><span>(c) Making by internal examiner</span></h2>
                 <div class="inside">
-                    <?php foreach ($se_questions as $key => $label): if(isset($report->$key)) : ?>
-                        <p><strong><?php echo esc_html($label); ?>:</strong> <?php echo eer_get_rating_label($report->$key); ?></p>
-                    <?php endif; endforeach; ?>
-                    <hr>
+                    <table class="widefat striped">
+                        <thead>
+                            <tr>
+                                <th>Criteria</th>
+                                <th style="width: 200px;">Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($se_questions as $key => $label): if(isset($report->$key)) : ?>
+                                <tr>
+                                    <td><?php echo esc_html($label); ?></td>
+                                    <td><?php echo eer_get_rating_label($report->$key); ?></td>
+                                </tr>
+                            <?php endif; endforeach; ?>
+                        </tbody>
+                    </table>
+                    <br>
                     <p><strong>Improvements:</strong></p>
-                    <p><?php echo nl2br(esc_html($report->se_improvement)); ?></p>
+                    <div style="background: #fff; border: 1px solid #ccd0d4; padding: 10px;"><?php echo nl2br(esc_html($report->se_improvement)); ?></div>
                 </div>
             </div>
 
             <div class="postbox">
                 <h2 class="hndle"><span>Student Performance</span></h2>
                 <div class="inside">
-                    <p><strong>Knowledge:</strong> <?php echo esc_html($report->knowledge_level); ?></p>
-                    <p><strong>Skills:</strong> <?php echo esc_html($report->skills_level); ?></p>
-                    <p><strong>Attitude:</strong> <?php echo esc_html($report->attitude_level); ?></p>
+                    <table class="widefat striped">
+                        <thead>
+                            <tr>
+                                <th>Domain</th>
+                                <th>Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Knowledge</strong></td>
+                                <td><?php echo esc_html($report->knowledge_level); ?></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Skills</strong></td>
+                                <td><?php echo esc_html($report->skills_level); ?></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Attitude</strong></td>
+                                <td><?php echo esc_html($report->attitude_level); ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
             <div class="postbox">
                 <h2 class="hndle"><span>Overall Performance & Comments</span></h2>
                 <div class="inside">
-                    <p><strong>Overall Performance:</strong> <?php echo esc_html($report->overall_performance); ?></p>
-                    <hr>
+                    <table class="widefat striped">
+                        <tbody>
+                            <tr>
+                                <td style="width: 200px;"><strong>Overall Performance</strong></td>
+                                <td><?php echo esc_html($report->overall_performance); ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br>
                     <p><strong>Overall Comments:</strong></p>
-                    <p><?php echo nl2br(esc_html($report->overall_comments)); ?></p>
+                    <div style="background: #fff; border: 1px solid #ccd0d4; padding: 10px;"><?php echo nl2br(esc_html($report->overall_comments)); ?></div>
                 </div>
             </div>
 
@@ -145,8 +228,34 @@ function eer_admin_page() {
         $subject_dist = $wpdb->get_results("SELECT subject, COUNT(*) as count FROM $table GROUP BY subject");
     }
 
-    // Get all reports for the table
-    $reports = $wpdb->get_results("SELECT * FROM $table ORDER BY submitted_at DESC");
+    // Handle Filters
+    $filter_subject = isset($_GET['filter_subject']) ? sanitize_text_field($_GET['filter_subject']) : '';
+    $filter_professional = isset($_GET['filter_professional']) ? sanitize_text_field($_GET['filter_professional']) : '';
+
+    $where_sql = "WHERE 1=1";
+    $query_args = [];
+
+    if ($filter_subject) {
+        $where_sql .= " AND subject = %s";
+        $query_args[] = $filter_subject;
+    }
+
+    if ($filter_professional) {
+        $where_sql .= " AND professional = %s";
+        $query_args[] = $filter_professional;
+    }
+
+    // Get filtered reports
+    $sql = "SELECT * FROM $table $where_sql ORDER BY submitted_at DESC";
+    if (!empty($query_args)) {
+        $reports = $wpdb->get_results($wpdb->prepare($sql, $query_args));
+    } else {
+        $reports = $wpdb->get_results($sql);
+    }
+
+    // Get options for filter dropdowns
+    $available_subjects = $wpdb->get_col("SELECT DISTINCT subject FROM $table WHERE subject != '' ORDER BY subject");
+    $available_professionals = $wpdb->get_col("SELECT DISTINCT professional FROM $table WHERE professional != '' ORDER BY professional");
     ?>
 
     <div class="wrap">
@@ -168,14 +277,19 @@ function eer_admin_page() {
                             <div class="inside">
                                 <p><strong>Total Reports:</strong> <?php echo $total_reports; ?></p>
                                 <h4>Reports by Subject:</h4>
-                                <ul>
-                                    <?php if (!empty($subject_dist)) : ?>
-                                        <?php foreach ($subject_dist as $row) : ?>
-                                            <li><strong><?php echo esc_html($row->subject); ?>:</strong> <?php echo $row->count; ?></li>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </ul>
-                                <hr>
+                                <table class="widefat striped">
+                                    <thead><tr><th>Subject</th><th>Count</th></tr></thead>
+                                    <tbody>
+                                        <?php if (!empty($subject_dist)) : ?>
+                                            <?php foreach ($subject_dist as $row) : ?>
+                                                <tr><td><?php echo esc_html($row->subject); ?></td><td><?php echo $row->count; ?></td></tr>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <tr><td colspan="2">No data</td></tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                                <br>
                                 <h4>Average Formative Assessment Ratings (out of 5):</h4>
                                 <?php
                                 $questions = get_option('eer_fa_questions', [
@@ -185,11 +299,14 @@ function eer_admin_page() {
                                     'fa4' => 'Opportunity to scrutinize scripts was given'
                                 ]);
                                 ?>
-                                <ul>
-                                    <?php foreach ($questions as $key => $label) : ?>
-                                        <li><?php echo esc_html($label); ?>: <strong><?php echo number_format($avg_ratings->$key, 2); ?></strong></li>
-                                    <?php endforeach; ?>
-                                </ul>
+                                <table class="widefat striped">
+                                    <thead><tr><th>Question</th><th>Avg Score</th></tr></thead>
+                                    <tbody>
+                                        <?php foreach ($questions as $key => $label) : ?>
+                                            <tr><td><?php echo esc_html($label); ?></td><td><strong><?php echo number_format($avg_ratings->$key, 2); ?></strong></td></tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         <div class="postbox">
@@ -209,11 +326,14 @@ function eer_admin_page() {
                                     'soe' => $ap_questions_opt['soe_quality']
                                 ];
                                 ?>
-                                <ul>
-                                    <?php foreach ($ap_labels as $key => $label) : ?>
-                                        <li><?php echo esc_html($label); ?>: <strong><?php echo number_format($avg_ap->$key, 2); ?></strong></li>
-                                    <?php endforeach; ?>
-                                </ul>
+                                <table class="widefat striped">
+                                    <thead><tr><th>Question</th><th>Avg Score</th></tr></thead>
+                                    <tbody>
+                                        <?php foreach ($ap_labels as $key => $label) : ?>
+                                            <tr><td><?php echo esc_html($label); ?></td><td><strong><?php echo number_format($avg_ap->$key, 2); ?></strong></td></tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         <div class="postbox">
@@ -227,42 +347,57 @@ function eer_admin_page() {
                                     'se4' => 'Marking by internal examiners for Clinical skill assessment was appropriate'
                                 ]);
                                 ?>
-                                <ul>
-                                    <?php if ($avg_se) : ?>
-                                        <?php foreach ($se_questions as $key => $label) : ?>
-                                            <li><?php echo esc_html($label); ?>: <strong><?php echo number_format($avg_se->$key, 2); ?></strong></li>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </ul>
+                                <table class="widefat striped">
+                                    <thead><tr><th>Question</th><th>Avg Score</th></tr></thead>
+                                    <tbody>
+                                        <?php if ($avg_se) : ?>
+                                            <?php foreach ($se_questions as $key => $label) : ?>
+                                                <tr><td><?php echo esc_html($label); ?></td><td><strong><?php echo number_format($avg_se->$key, 2); ?></strong></td></tr>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         <div class="postbox">
                             <h2 class="hndle"><span>Overall Performance Distribution</span></h2>
                             <div class="inside">
-                                <ul>
-                                    <li><strong>Above expectation:</strong> <?php echo isset($performance_dist['Above expectation']) ? $performance_dist['Above expectation']->count : 0; ?></li>
-                                    <li><strong>Met expectation:</strong> <?php echo isset($performance_dist['Met expectation']) ? $performance_dist['Met expectation']->count : 0; ?></li>
-                                    <li><strong>Below expectation:</strong> <?php echo isset($performance_dist['Below expectation']) ? $performance_dist['Below expectation']->count : 0; ?></li>
-                                </ul>
+                                <table class="widefat striped">
+                                    <thead><tr><th>Level</th><th>Count</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Above expectation</td><td><?php echo isset($performance_dist['Above expectation']) ? $performance_dist['Above expectation']->count : 0; ?></td></tr>
+                                        <tr><td>Met expectation</td><td><?php echo isset($performance_dist['Met expectation']) ? $performance_dist['Met expectation']->count : 0; ?></td></tr>
+                                        <tr><td>Below expectation</td><td><?php echo isset($performance_dist['Below expectation']) ? $performance_dist['Below expectation']->count : 0; ?></td></tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         <div class="postbox">
                             <h2 class="hndle"><span>Student Performance Breakdown</span></h2>
                             <div class="inside">
-                                <p><strong>Knowledge:</strong><br>
-                                Above: <?php echo isset($knowledge_dist['Above expectation']) ? $knowledge_dist['Above expectation']->count : 0; ?> |
-                                Met: <?php echo isset($knowledge_dist['Met expectation']) ? $knowledge_dist['Met expectation']->count : 0; ?> |
-                                Below: <?php echo isset($knowledge_dist['Below expectation']) ? $knowledge_dist['Below expectation']->count : 0; ?></p>
-
-                                <p><strong>Skills:</strong><br>
-                                Above: <?php echo isset($skills_dist['Above expectation']) ? $skills_dist['Above expectation']->count : 0; ?> |
-                                Met: <?php echo isset($skills_dist['Met expectation']) ? $skills_dist['Met expectation']->count : 0; ?> |
-                                Below: <?php echo isset($skills_dist['Below expectation']) ? $skills_dist['Below expectation']->count : 0; ?></p>
-
-                                <p><strong>Attitude:</strong><br>
-                                Above: <?php echo isset($attitude_dist['Above expectation']) ? $attitude_dist['Above expectation']->count : 0; ?> |
-                                Met: <?php echo isset($attitude_dist['Met expectation']) ? $attitude_dist['Met expectation']->count : 0; ?> |
-                                Below: <?php echo isset($attitude_dist['Below expectation']) ? $attitude_dist['Below expectation']->count : 0; ?></p>
+                                <table class="widefat striped">
+                                    <thead><tr><th>Domain</th><th>Above</th><th>Met</th><th>Below</th></tr></thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Knowledge</strong></td>
+                                            <td><?php echo isset($knowledge_dist['Above expectation']) ? $knowledge_dist['Above expectation']->count : 0; ?></td>
+                                            <td><?php echo isset($knowledge_dist['Met expectation']) ? $knowledge_dist['Met expectation']->count : 0; ?></td>
+                                            <td><?php echo isset($knowledge_dist['Below expectation']) ? $knowledge_dist['Below expectation']->count : 0; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Skills</strong></td>
+                                            <td><?php echo isset($skills_dist['Above expectation']) ? $skills_dist['Above expectation']->count : 0; ?></td>
+                                            <td><?php echo isset($skills_dist['Met expectation']) ? $skills_dist['Met expectation']->count : 0; ?></td>
+                                            <td><?php echo isset($skills_dist['Below expectation']) ? $skills_dist['Below expectation']->count : 0; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Attitude</strong></td>
+                                            <td><?php echo isset($attitude_dist['Above expectation']) ? $attitude_dist['Above expectation']->count : 0; ?></td>
+                                            <td><?php echo isset($attitude_dist['Met expectation']) ? $attitude_dist['Met expectation']->count : 0; ?></td>
+                                            <td><?php echo isset($attitude_dist['Below expectation']) ? $attitude_dist['Below expectation']->count : 0; ?></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -272,6 +407,29 @@ function eer_admin_page() {
         <?php endif; ?>
 
         <h2>All Submitted Reports</h2>
+
+        <!-- Filter Form -->
+        <form method="get" action="" style="margin-bottom: 15px; background: #fff; padding: 10px; border: 1px solid #ccd0d4; box-shadow: 0 1px 1px rgba(0,0,0,.04);">
+            <input type="hidden" name="page" value="eer-reports">
+            <div class="alignleft actions">
+                <select name="filter_subject">
+                    <option value="">All Subjects</option>
+                    <?php foreach ($available_subjects as $subj) : ?>
+                        <option value="<?php echo esc_attr($subj); ?>" <?php selected($filter_subject, $subj); ?>><?php echo esc_html($subj); ?></option>
+                    <?php endforeach; ?>
+                </select>
+
+                <select name="filter_professional">
+                    <option value="">All Professionals</option>
+                    <?php foreach ($available_professionals as $prof) : ?>
+                        <option value="<?php echo esc_attr($prof); ?>" <?php selected($filter_professional, $prof); ?>><?php echo esc_html($prof); ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <input type="submit" class="button" value="Filter Results">
+            </div>
+            <br class="clear">
+        </form>
+
         <form method="post" action="" style="margin-bottom: 20px;" onsubmit="return confirm('Are you sure you want to delete ALL reports? This action cannot be undone.');">
             <?php wp_nonce_field('eer_delete_all_reports', 'eer_delete_nonce'); ?>
             <input type="hidden" name="eer_action" value="delete_all">
