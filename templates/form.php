@@ -428,7 +428,6 @@
     </div>
 
     <input type="submit" name="eer_submit" value="Submit Report" class="eer-submit-btn">
-
 </form>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
