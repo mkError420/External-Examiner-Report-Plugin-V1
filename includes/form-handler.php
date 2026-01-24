@@ -55,7 +55,8 @@ function eer_handle_form() {
     ]);
 
     // Redirect to prevent form resubmission on page reload
-    wp_redirect($_SERVER['REQUEST_URI']);
+    $redirect_url = add_query_arg('report-submitted', 'true', $_SERVER['REQUEST_URI']);
+    wp_redirect($redirect_url);
     exit;
 }
 
@@ -122,3 +123,10 @@ function eer_handle_admin_actions() {
         exit;
     }
 }
+
+function eer_render_shortcode() {
+    ob_start();
+    include plugin_dir_path( dirname( __FILE__ ) ) . 'templates/form.php';
+    return ob_get_clean();
+}
+add_shortcode('external_examiner_report', 'eer_render_shortcode');

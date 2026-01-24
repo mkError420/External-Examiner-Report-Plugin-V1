@@ -256,15 +256,35 @@ function eer_admin_page() {
     // Get options for filter dropdowns
     $available_subjects = $wpdb->get_col("SELECT DISTINCT subject FROM $table WHERE subject != '' ORDER BY subject");
     $available_professionals = $wpdb->get_col("SELECT DISTINCT professional FROM $table WHERE professional != '' ORDER BY professional");
+    
+    $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'dashboard';
     ?>
 
     <div class="wrap">
         <h1>External Examiner Report Dashboard</h1>
 
+        <h2 class="nav-tab-wrapper">
+            <a href="?page=eer-reports&tab=dashboard" class="nav-tab <?php echo $active_tab === 'dashboard' ? 'nav-tab-active' : ''; ?>">Dashboard</a>
+            <a href="?page=eer-reports&tab=settings" class="nav-tab <?php echo $active_tab === 'settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
+        </h2>
+
         <?php
         if (isset($_GET['settings-updated']) && $_GET['settings-updated'] === 'true') {
             echo '<div class="notice notice-success is-dismissible"><p>Settings saved.</p></div>';
         }
+        if (isset($_GET['report-submitted']) && $_GET['report-submitted'] === 'true') {
+            echo '<div class="notice notice-success is-dismissible"><p>Report submitted successfully.</p></div>';
+        }
+        
+        if ($active_tab === 'settings') {
+            ?>
+            <div class="card" style="max-width: 100%; margin-top: 20px; padding: 20px;">
+                <h3>Shortcode</h3>
+                <p>Use this shortcode to display the form on any page:</p>
+                <p><input type="text" value="[external_examiner_report]" class="large-text" readonly onclick="this.select();"></p>
+            </div>
+            <?php
+        } else {
         ?>
 
         <?php if ($total_reports > 0) : ?>
@@ -469,5 +489,6 @@ function eer_admin_page() {
                 <?php endif; ?>
             </tbody>
         </table>
+        <?php } ?>
     </div>
 <?php }
