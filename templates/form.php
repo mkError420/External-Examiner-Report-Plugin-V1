@@ -1,4 +1,5 @@
 <style>
+ 
     .eer-form-wrapper {
         max-width: 800px;
         margin: 20px auto;
@@ -97,7 +98,7 @@
         border-color: #ccc;
     }
     .eer-submit-btn {
-        background: #0073aa;
+        background: #070d5f;
         color: #fff;
         border: none;
         padding: 12px 24px;
@@ -114,13 +115,21 @@
         background: #005177;
     }
     .eer-scale-legend {
-        font-size: 0.85em;
-        color: #666;
-        background: #f0f0f1;
+        color: #ffffff;
+        background: #6f6f70;
         padding: 8px;
         border-radius: 4px;
         margin-bottom: 15px;
         text-align: center;
+        font-size: medium;
+        font-weight: bold;
+    }
+    .scale{
+        text-decoration: none;
+        font-weight: 800;
+        margin-right: 8px;
+        color: #ffece7;
+        
     }
     .eer-required {
         color: #d63638;
@@ -291,7 +300,7 @@
     <h4>(1) Assessment Process</h4>
     
     <h5>(a) Formative assessment procedures were satisfactory (All terms & card exam)</h5>
-    <div class="eer-scale-legend">Scale: SA - Strongly Agree (5), A - Agree (4), U - Undecided (3), DA - Disagree (2), SDA - Strongly Disagree (1)</div>
+    <div class="eer-scale-legend"><span class="scale">SCALE:</span> SA - Strongly Agree (5), A - Agree (4), U - Undecided (3), DA - Disagree (2), SDA - Strongly Disagree (1)</div>
 
     <?php
     $questions = get_option('eer_fa_questions', [
