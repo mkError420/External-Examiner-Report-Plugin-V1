@@ -2,8 +2,8 @@
 /**
  * Plugin Name: External Examiner Report
  * Description: Digital External Examiner Report Form for Medical Colleges
- * Version: 1.0
- * Author: Mk. Rabbani
+ * Version: 1.10
+ * Author: Mk. Rabbani(Website Manager RCMCH)
  */
 
 if (!defined('ABSPATH')) exit;
