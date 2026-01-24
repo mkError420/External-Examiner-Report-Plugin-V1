@@ -79,6 +79,29 @@ function eer_handle_admin_actions() {
         exit;
     }
 
+    if (isset($_POST['eer_action']) && $_POST['eer_action'] === 'delete_selected') {
+        if (!isset($_POST['eer_bulk_nonce']) || !wp_verify_nonce($_POST['eer_bulk_nonce'], 'eer_bulk_action')) {
+            wp_die('Security check failed');
+        }
+
+        if (!current_user_can('manage_options')) {
+            wp_die('Unauthorized');
+        }
+
+        if (isset($_POST['report_ids']) && is_array($_POST['report_ids'])) {
+            global $wpdb;
+            $table = $wpdb->prefix . 'examiner_reports';
+            $ids = array_map('intval', $_POST['report_ids']);
+            if (!empty($ids)) {
+                $ids_placeholder = implode(',', array_fill(0, count($ids), '%d'));
+                $wpdb->query($wpdb->prepare("DELETE FROM $table WHERE id IN ($ids_placeholder)", $ids));
+            }
+        }
+
+        wp_redirect(remove_query_arg(['paged', 'report-submitted'], $_SERVER['REQUEST_URI']));
+        exit;
+    }
+
     if (isset($_POST['eer_action']) && $_POST['eer_action'] === 'save_settings') {
         if (!isset($_POST['eer_settings_nonce']) || !wp_verify_nonce($_POST['eer_settings_nonce'], 'eer_save_settings')) {
             wp_die('Security check failed');

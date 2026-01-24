@@ -248,6 +248,7 @@ function eer_live_search_callback() {
         foreach ($reports as $r) {
             ?>
             <tr>
+                <td class="check-column"><input type="checkbox" name="report_ids[]" value="<?php echo $r->id; ?>"></td>
                 <td>
                     <span class="eer-id-column">#<?php echo $r->id; ?></span>
                 </td>
@@ -263,7 +264,7 @@ function eer_live_search_callback() {
             <?php
         }
     } else {
-        echo '<tr><td colspan="7" style="text-align: center; padding: 30px;">No reports found.</td></tr>';
+        echo '<tr><td colspan="8" style="text-align: center; padding: 30px;">No reports found.</td></tr>';
     }
     wp_die();
 }
@@ -444,16 +445,24 @@ function eer_admin_page() {
                     <input type="submit" class="button" value="Filter">
                 </form>
 
-                <form method="post" action="" onsubmit="return confirm('Are you sure you want to delete ALL reports? This action cannot be undone.');">
-                    <?php wp_nonce_field('eer_delete_all_reports', 'eer_delete_nonce'); ?>
-                    <input type="hidden" name="eer_action" value="delete_all">
-                    <input type="submit" class="button button-link-delete" value="Delete All Reports">
-                </form>
+            </div>
+
+            <form method="post" action="">
+            <?php wp_nonce_field('eer_bulk_action', 'eer_bulk_nonce'); ?>
+            <div class="tablenav top" style="padding: 10px 20px; clear: both;">
+                <div class="alignleft actions bulkactions">
+                    <select name="eer_action" id="bulk-action-selector-top">
+                        <option value="-1">Bulk Actions</option>
+                        <option value="delete_selected">Delete Selected</option>
+                    </select>
+                    <input type="submit" id="doaction" class="button action" value="Apply">
+                </div>
             </div>
 
             <table class="eer-custom-table">
                 <thead>
                     <tr>
+                        <th class="manage-column column-cb check-column"><input type="checkbox" id="cb-select-all-1"></th>
                         <th>ID</th>
                         <th>Teacher Name</th>
                         <th>Subject</th>
@@ -467,6 +476,7 @@ function eer_admin_page() {
                     <?php if (!empty($reports)) : ?>
                         <?php foreach ($reports as $r) : ?>
                             <tr>
+                                <td class="check-column"><input type="checkbox" name="report_ids[]" value="<?php echo $r->id; ?>"></td>
                                 <td>
                                     <span class="eer-id-column">#<?php echo $r->id; ?></span>
                                 </td>
@@ -482,11 +492,12 @@ function eer_admin_page() {
                         <?php endforeach; ?>
                     <?php else : ?>
                         <tr>
-                            <td colspan="6" style="text-align: center; padding: 30px;">No reports found.</td>
+                            <td colspan="8" style="text-align: center; padding: 30px;">No reports found.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
             </table>
+            </form>
 
             <script type="text/javascript">
             jQuery(document).ready(function($) {
@@ -512,6 +523,11 @@ function eer_admin_page() {
                             }
                         });
                     }, 300);
+                });
+
+                // Select All checkbox
+                $('#cb-select-all-1').on('click', function() {
+                    $('input[name="report_ids[]"]').prop('checked', this.checked);
                 });
             });
             </script>

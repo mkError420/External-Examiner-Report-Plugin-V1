@@ -126,7 +126,102 @@
         color: #d63638;
         margin-left: 3px;
     }
+    /* Modal styles */
+    .eer-modal {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        z-index: 999999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: rgba(0,0,0,0.8);
+        animation: fadeIn 0.4s;
+    }
+    .eer-modal-content {
+        background-color: #fefefe;
+        margin: 0;
+        padding: 30px;
+        border: 1px solid #888;
+        width: 90%;
+        max-width: 450px;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        position: relative;
+        animation: slideIn 0.4s;
+    }
+    .eer-close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .eer-close:hover,
+    .eer-close:focus {
+        color: #000;
+        text-decoration: none;
+    }
+    .eer-success-icon {
+        color: #28a745;
+        font-size: 60px;
+        margin-bottom: 15px;
+    }
+    .eer-modal-btn {
+        background-color: #0073aa;
+        color: white;
+        padding: 10px 25px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+    .eer-modal-btn:hover {
+        background-color: #005177;
+    }
+    @keyframes fadeIn {
+        from {opacity: 0} 
+        to {opacity: 1}
+    }
+    @keyframes slideIn {
+        from {transform: translateY(-50px); opacity: 0}
+        to {transform: translateY(0); opacity: 1}
+    }
 </style>
+
+<?php if (isset($_GET['report-submitted']) && $_GET['report-submitted'] === 'true') : ?>
+    <div id="eer-success-modal" class="eer-modal">
+        <div class="eer-modal-content">
+            <span class="eer-close" onclick="document.getElementById('eer-success-modal').style.display='none'">&times;</span>
+            <div class="eer-success-icon">&#10004;</div>
+            <h2 style="margin-top: 0; color: #333;">Success!</h2>
+            <p style="font-size: 16px; color: #666;">Your report has been submitted successfully.</p>
+            <button class="eer-modal-btn" onclick="document.getElementById('eer-success-modal').style.display='none'">Close</button>
+        </div>
+    </div>
+    <script>
+        window.onclick = function(event) {
+            var modal = document.getElementById('eer-success-modal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Remove query param from URL to prevent popup on refresh
+        if (window.history.replaceState) {
+            var url = new URL(window.location.href);
+            url.searchParams.delete('report-submitted');
+            window.history.replaceState(null, '', url.toString());
+        }
+    </script>
+<?php endif; ?>
 
 <div class="eer-form-wrapper">
 <form method="post">
@@ -326,4 +421,30 @@
     <input type="submit" name="eer_submit" value="Submit Report" class="eer-submit-btn">
 
 </form>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var radios = document.querySelectorAll('.eer-form-wrapper input[type="radio"]');
+        radios.forEach(function(radio) {
+            if (radio.checked) {
+                radio.setAttribute('data-was-checked', 'true');
+            }
+            radio.addEventListener('click', function() {
+                var wasChecked = this.getAttribute('data-was-checked') === 'true';
+                var groupName = this.name;
+                var group = document.querySelectorAll('input[name="' + groupName + '"]');
+                
+                group.forEach(function(r) {
+                    r.setAttribute('data-was-checked', 'false');
+                });
+
+                if (wasChecked) {
+                    this.checked = false;
+                } else {
+                    this.checked = true;
+                    this.setAttribute('data-was-checked', 'true');
+                }
+            });
+        });
+    });
+</script>
 </div>
