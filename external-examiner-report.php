@@ -40,3 +40,5 @@ function eer_admin_menu() {
         'dashicons-clipboard'
     );
 }
+
+add_action('wp_ajax_eer_live_search', 'eer_live_search_callback');

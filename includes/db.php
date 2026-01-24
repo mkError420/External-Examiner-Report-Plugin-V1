@@ -9,6 +9,7 @@ function eer_create_table() {
 
     $sql = "CREATE TABLE $table (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        teacher_name VARCHAR(100),
         subject VARCHAR(100),
         professional VARCHAR(50),
         exam_period VARCHAR(50),

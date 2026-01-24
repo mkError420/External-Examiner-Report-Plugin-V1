@@ -21,6 +21,7 @@ function eer_handle_form() {
     eer_create_table();
 
     $wpdb->insert($table, [
+        'teacher_name' => isset($_POST['teacher_name']) ? sanitize_text_field($_POST['teacher_name']) : '',
         'subject' => sanitize_text_field($_POST['subject']),
         'professional' => sanitize_text_field($_POST['professional']),
         'exam_period' => sanitize_text_field($_POST['exam_period']),

@@ -19,13 +19,38 @@ function eer_display_single_report($report) {
     <div class="wrap">
         <h1>Report Details (ID: <?php echo $report->id; ?>)</h1>
         <a href="?page=eer-reports" class="button">&larr; Back to Dashboard</a>
+        <button id="eer-download-pdf" class="button button-primary">Download PDF</button>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('eer-download-pdf').addEventListener('click', function() {
+                var element = document.getElementById('eer-report-content');
+                var opt = {
+                    margin:       0.5,
+                    filename:     'Examiner_Report_<?php echo $report->id; ?>.pdf',
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+                    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+                    pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+                };
+                html2pdf().set(opt).from(element).save();
+            });
+        });
+        </script>
 
         <div id="poststuff" style="margin-top: 20px;">
+            <div id="eer-report-content">
+            <h2 style="text-align: center; margin-bottom: 0; background: #070d5f; border: 1px solid #070d5f; border-radius: 5px; color: #fff;padding: 5px;color: #c8cfd6;">Rangpur Community Medical College Hospital (RCMCH) </h2>
             <div class="postbox">
                 <h2 class="hndle"><span>General Information</span></h2>
                 <div class="inside">
                     <table class="widefat striped">
                         <tbody>
+                            <tr>
+                                <td style="width: 200px;"><strong>Teacher Name</strong></td>
+                                <td><?php echo esc_html($report->teacher_name); ?></td>
+                            </tr>
                             <tr>
                                 <td style="width: 200px;"><strong>Subject</strong></td>
                                 <td><?php echo esc_html($report->subject); ?></td>
@@ -55,12 +80,13 @@ function eer_display_single_report($report) {
             $fa_questions = get_option('eer_fa_questions', []);
             ?>
             <div class="postbox">
-                <h2 class="hndle"><span>(a) Formative Assessment</span></h2>
+                <h2 class="hndle"><span>(1) Assessment Process</span></h2>
+                <h3 class="hndle"><span>(a) Formative assessment procedures were satisfactory (All terms & card exam):</span></h3>
                 <div class="inside">
                     <table class="widefat striped">
                         <thead>
                             <tr>
-                                <th>Criteria</th>
+                                <th>Statements</th>
                                 <th style="width: 200px;">Rating</th>
                             </tr>
                         </thead>
@@ -74,19 +100,19 @@ function eer_display_single_report($report) {
                         </tbody>
                     </table>
                     <br>
-                    <p><strong>Improvements:</strong></p>
+                    <p><strong>Formative Assessment can be further Improved by:</strong></p>
                     <div style="background: #fff; border: 1px solid #ccd0d4; padding: 10px;"><?php echo nl2br(esc_html($report->fa_improvement)); ?></div>
                 </div>
             </div>
 
             <?php $ap_questions = get_option('eer_ap_questions', []); ?>
             <div class="postbox">
-                <h2 class="hndle"><span>(b) Quality of Summative Assessments</span></h2>
+                <h2 class="hndle"><span>(b) Quality of Summative Assessments (Professional Examination):</span></h2>
                 <div class="inside">
                     <table class="widefat striped">
                         <thead>
                             <tr>
-                                <th>Criteria</th>
+                                <th>Statements</th>
                                 <th style="width: 200px;">Rating</th>
                             </tr>
                         </thead>
@@ -100,19 +126,19 @@ function eer_display_single_report($report) {
                         </tbody>
                     </table>
                     <br>
-                    <p><strong>Improvements:</strong></p>
+                    <p><strong>The quality of SOE, OSPE, Traditional Practical, Clinical skill assessment can be further improved by:</strong></p>
                     <div style="background: #fff; border: 1px solid #ccd0d4; padding: 10px;"><?php echo nl2br(esc_html($report->ap_improvement)); ?></div>
                 </div>
             </div>
 
             <?php $se_questions = get_option('eer_se_questions', []); ?>
             <div class="postbox">
-                <h2 class="hndle"><span>(c) Making by internal examiner</span></h2>
+                <h2 class="hndle"><span>(c) Marking by internal examiner in professional examination:</span></h2>
                 <div class="inside">
                     <table class="widefat striped">
                         <thead>
                             <tr>
-                                <th>Criteria</th>
+                                <th>Statements</th>
                                 <th style="width: 200px;">Rating</th>
                             </tr>
                         </thead>
@@ -126,32 +152,33 @@ function eer_display_single_report($report) {
                         </tbody>
                     </table>
                     <br>
-                    <p><strong>Improvements:</strong></p>
-                    <div style="background: #fff; border: 1px solid #ccd0d4; padding: 10px;"><?php echo nl2br(esc_html($report->se_improvement)); ?></div>
+                    
                 </div>
             </div>
 
             <div class="postbox">
-                <h2 class="hndle"><span>Student Performance</span></h2>
+                <h2 class="hndle"><strong>(2) Student Performance (During Professional Examination/Summative Exam)</strong></h2>
+                <h3 class="hndle"><strong>(a) Quality of learning outcomes:</strong></h3>
+                
                 <div class="inside">
                     <table class="widefat striped">
                         <thead>
                             <tr>
-                                <th>Domain</th>
+                                <th>Statements</th>
                                 <th>Level</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><strong>Knowledge</strong></td>
+                                <td><strong>Level of learning outcome demonstrated by students in relation to knowledge was</strong></td>
                                 <td><?php echo esc_html($report->knowledge_level); ?></td>
                             </tr>
                             <tr>
-                                <td><strong>Skills</strong></td>
+                                <td><strong>Level of learning outcome demonstrated by students in relation to skills was</strong></td>
                                 <td><?php echo esc_html($report->skills_level); ?></td>
                             </tr>
                             <tr>
-                                <td><strong>Attitude</strong></td>
+                                <td><strong>Level of learning outcome demonstrated by students in relation to attitude was</strong></td>
                                 <td><?php echo esc_html($report->attitude_level); ?></td>
                             </tr>
                         </tbody>
@@ -160,7 +187,7 @@ function eer_display_single_report($report) {
             </div>
 
             <div class="postbox">
-                <h2 class="hndle"><span>Overall Performance & Comments</span></h2>
+                <h3 class="hndle"><span>(b) Overall, the performance of the students in relation to students of other Medical Colleges:</span></h3>
                 <div class="inside">
                     <table class="widefat striped">
                         <tbody>
@@ -171,14 +198,74 @@ function eer_display_single_report($report) {
                         </tbody>
                     </table>
                     <br>
-                    <p><strong>Overall Comments:</strong></p>
+                    <p><strong>(3) Overall comments (Assessment process, Formative & Summative examination) & suggestions:</strong></p>
                     <div style="background: #fff; border: 1px solid #ccd0d4; padding: 10px;"><?php echo nl2br(esc_html($report->overall_comments)); ?></div>
                 </div>
             </div>
 
+            </div>
         </div>
     </div>
     <?php
+}
+
+function eer_live_search_callback() {
+    global $wpdb;
+    $table = $wpdb->prefix . 'examiner_reports';
+
+    $search_query = isset($_POST['search']) ? sanitize_text_field($_POST['search']) : '';
+    $filter_subject = isset($_POST['subject']) ? sanitize_text_field($_POST['subject']) : '';
+    $filter_professional = isset($_POST['professional']) ? sanitize_text_field($_POST['professional']) : '';
+
+    $where_sql = "WHERE 1=1";
+    $query_args = [];
+
+    if ($filter_subject) {
+        $where_sql .= " AND subject = %s";
+        $query_args[] = $filter_subject;
+    }
+
+    if ($filter_professional) {
+        $where_sql .= " AND professional = %s";
+        $query_args[] = $filter_professional;
+    }
+
+    if ($search_query) {
+        $where_sql .= " AND (teacher_name LIKE %s OR professional LIKE %s)";
+        $like = '%' . $wpdb->esc_like($search_query) . '%';
+        $query_args[] = $like;
+        $query_args[] = $like;
+    }
+
+    $sql = "SELECT * FROM $table $where_sql ORDER BY submitted_at DESC";
+    if (!empty($query_args)) {
+        $reports = $wpdb->get_results($wpdb->prepare($sql, $query_args));
+    } else {
+        $reports = $wpdb->get_results($sql);
+    }
+
+    if (!empty($reports)) {
+        foreach ($reports as $r) {
+            ?>
+            <tr>
+                <td>
+                    <span class="eer-id-column">#<?php echo $r->id; ?></span>
+                </td>
+                <td><?php echo esc_html($r->teacher_name); ?></td>
+                <td><?php echo esc_html($r->subject); ?></td>
+                <td><?php echo esc_html($r->professional); ?></td>
+                <td><?php echo esc_html($r->overall_performance); ?></td>
+                <td><?php echo date_i18n(get_option('date_format'), strtotime($r->submitted_at)); ?></td>
+                <td>
+                    <a href="?page=eer-reports&action=view&report_id=<?php echo $r->id; ?>" class="button button-small">View Details</a>
+                </td>
+            </tr>
+            <?php
+        }
+    } else {
+        echo '<tr><td colspan="7" style="text-align: center; padding: 30px;">No reports found.</td></tr>';
+    }
+    wp_die();
 }
 
 function eer_admin_page() {
@@ -200,37 +287,10 @@ function eer_admin_page() {
         return; // Stop rendering the dashboard
     }
 
-
-    $avg_ratings = null;
-    $avg_ap = null;
-    $avg_se = null;
-    $performance_dist = [];
-    $knowledge_dist = [];
-    $skills_dist = [];
-    $attitude_dist = [];
-    $subject_dist = [];
-
-    if ($total_reports > 0) {
-        // Get average ratings for formative assessment
-        $avg_ratings = $wpdb->get_row("SELECT AVG(fa1) as fa1, AVG(fa2) as fa2, AVG(fa3) as fa3, AVG(fa4) as fa4 FROM $table");
-        // Get average ratings for assessment process
-        $avg_ap = $wpdb->get_row("SELECT AVG(ospe_quality) as ospe, AVG(clinical_quality) as clinical, AVG(practical_quality) as practical, AVG(soe_quality) as soe FROM $table");
-        // Get average ratings for standard of examination
-        $avg_se = $wpdb->get_row("SELECT AVG(se1) as se1, AVG(se2) as se2, AVG(se3) as se3, AVG(se4) as se4 FROM $table");
-
-        // Get overall performance distribution
-        $performance_dist = $wpdb->get_results("SELECT overall_performance, COUNT(*) as count FROM $table GROUP BY overall_performance", OBJECT_K);
-        $knowledge_dist = $wpdb->get_results("SELECT knowledge_level, COUNT(*) as count FROM $table GROUP BY knowledge_level", OBJECT_K);
-        $skills_dist = $wpdb->get_results("SELECT skills_level, COUNT(*) as count FROM $table GROUP BY skills_level", OBJECT_K);
-        $attitude_dist = $wpdb->get_results("SELECT attitude_level, COUNT(*) as count FROM $table GROUP BY attitude_level", OBJECT_K);
-
-        // Get report counts by subject
-        $subject_dist = $wpdb->get_results("SELECT subject, COUNT(*) as count FROM $table GROUP BY subject");
-    }
-
     // Handle Filters
     $filter_subject = isset($_GET['filter_subject']) ? sanitize_text_field($_GET['filter_subject']) : '';
     $filter_professional = isset($_GET['filter_professional']) ? sanitize_text_field($_GET['filter_professional']) : '';
+    $search_query = isset($_GET['eer_search']) ? sanitize_text_field($_GET['eer_search']) : '';
 
     $where_sql = "WHERE 1=1";
     $query_args = [];
@@ -243,6 +303,13 @@ function eer_admin_page() {
     if ($filter_professional) {
         $where_sql .= " AND professional = %s";
         $query_args[] = $filter_professional;
+    }
+
+    if ($search_query) {
+        $where_sql .= " AND (teacher_name LIKE %s OR professional LIKE %s)";
+        $like = '%' . $wpdb->esc_like($search_query) . '%';
+        $query_args[] = $like;
+        $query_args[] = $like;
     }
 
     // Get filtered reports
@@ -264,33 +331,67 @@ function eer_admin_page() {
         <h1>External Examiner Report Dashboard</h1>
 
         <style>
-            .eer-dashboard-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                gap: 20px;
-                margin: 20px 0;
-            }
-            .eer-card {
+            .eer-reports-card {
                 background: #fff;
                 border: 1px solid #c3c4c7;
                 box-shadow: 0 1px 1px rgba(0,0,0,.04);
+                margin-top: 20px;
             }
-            .eer-card-header {
-                padding: 12px 15px;
+            .eer-reports-header {
+                padding: 15px 20px;
                 border-bottom: 1px solid #c3c4c7;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
                 background: #f6f7f7;
+            }
+            .eer-reports-title {
+                margin: 0;
+                font-size: 16px;
                 font-weight: 600;
-                font-size: 14px;
                 color: #1d2327;
             }
-            .eer-card-body {
-                padding: 15px;
+            .eer-filter-bar {
+                padding: 15px 20px;
+                border-bottom: 1px solid #eaecf0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 10px;
             }
-            .eer-stat-number {
-                font-size: 2rem;
+            .eer-filter-group {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+            .eer-custom-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .eer-custom-table th {
+                text-align: left;
+                padding: 12px 20px;
                 font-weight: 600;
+                color: #646970;
+                border-bottom: 1px solid #c3c4c7;
+                background: #fff;
+            }
+            .eer-custom-table td {
+                padding: 12px 20px;
+                border-bottom: 1px solid #f0f0f1;
+                color: #3c434a;
+                vertical-align: middle;
+            }
+            .eer-custom-table tr:last-child td {
+                border-bottom: none;
+            }
+            .eer-custom-table tr:hover td {
+                background: #f6f7f7;
+            }
+            .eer-id-column {
+                font-weight: bold;
                 color: #2271b1;
-                margin-bottom: 0.5rem;
             }
         </style>
 
@@ -318,213 +419,103 @@ function eer_admin_page() {
         } else {
         ?>
 
-        <?php if ($total_reports > 0) : ?>
-        <div class="eer-dashboard-grid">
+        <div class="eer-reports-card">
+            <div class="eer-reports-header">
+                <h2 class="eer-reports-title">All Submitted Reports</h2>
+            </div>
             
-            <div class="eer-card">
-                <div class="eer-card-header">Summary Overview</div>
-                <div class="eer-card-body">
-                    <div class="eer-stat-number"><?php echo $total_reports; ?></div>
-                    <p style="margin-top:0; color:#646970;">Total Reports Submitted</p>
-                                <h4>Reports by Subject:</h4>
-                                <table class="widefat striped">
-                                    <thead><tr><th>Subject</th><th>Count</th></tr></thead>
-                                    <tbody>
-                                        <?php if (!empty($subject_dist)) : ?>
-                                            <?php foreach ($subject_dist as $row) : ?>
-                                                <tr><td><?php echo esc_html($row->subject); ?></td><td><?php echo $row->count; ?></td></tr>
-                                            <?php endforeach; ?>
-                                        <?php else: ?>
-                                            <tr><td colspan="2">No data</td></tr>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                </div>
+            <div class="eer-filter-bar">
+                <form method="get" action="" class="eer-filter-group">
+                    <input type="hidden" name="page" value="eer-reports">
+                    <input type="search" id="eer-search-input" name="eer_search" value="<?php echo esc_attr($search_query); ?>" placeholder="Search Teacher or Professional" autocomplete="off">
+                    <select name="filter_subject">
+                        <option value="">All Subjects</option>
+                        <?php foreach ($available_subjects as $subj) : ?>
+                            <option value="<?php echo esc_attr($subj); ?>" <?php selected($filter_subject, $subj); ?>><?php echo esc_html($subj); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <select name="filter_professional">
+                        <option value="">All Professionals</option>
+                        <?php foreach ($available_professionals as $prof) : ?>
+                            <option value="<?php echo esc_attr($prof); ?>" <?php selected($filter_professional, $prof); ?>><?php echo esc_html($prof); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <input type="submit" class="button" value="Filter">
+                </form>
+
+                <form method="post" action="" onsubmit="return confirm('Are you sure you want to delete ALL reports? This action cannot be undone.');">
+                    <?php wp_nonce_field('eer_delete_all_reports', 'eer_delete_nonce'); ?>
+                    <input type="hidden" name="eer_action" value="delete_all">
+                    <input type="submit" class="button button-link-delete" value="Delete All Reports">
+                </form>
             </div>
 
-            <div class="eer-card">
-                <div class="eer-card-header">Formative Assessment (Avg Score)</div>
-                <div class="eer-card-body">
-                    <?php
-                    $questions = get_option('eer_fa_questions', [
-                        'fa1' => 'Formative assessment procedures were satisfactory',
-                        'fa2' => 'Records of formative assessment were adequate',
-                        'fa3' => 'Question papers and scripts were available',
-                        'fa4' => 'Opportunity to scrutinize scripts was given'
-                    ]);
-                    ?>
-                    <table class="widefat striped">
-                        <thead><tr><th>Question</th><th>Avg</th></tr></thead>
-                        <tbody>
-                            <?php foreach ($questions as $key => $label) : ?>
-                                <tr><td><?php echo esc_html($label); ?></td><td><strong><?php echo number_format($avg_ratings->$key, 2); ?></strong></td></tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="eer-card">
-                <div class="eer-card-header">Assessment Process Quality (Avg)</div>
-                <div class="eer-card-body">
-                                <?php
-                                $ap_questions_opt = get_option('eer_ap_questions', [
-                                    'ospe_quality' => 'Quality of OSPE/OSCE',
-                                    'clinical_quality' => 'Quality of Clinical Exam',
-                                    'practical_quality' => 'Quality of Practical Exam',
-                                    'soe_quality' => 'Quality of SOE'
-                                ]);
-                                $ap_labels = [
-                                    'ospe' => $ap_questions_opt['ospe_quality'],
-                                    'clinical' => $ap_questions_opt['clinical_quality'],
-                                    'practical' => $ap_questions_opt['practical_quality'],
-                                    'soe' => $ap_questions_opt['soe_quality']
-                                ];
-                                ?>
-                                <table class="widefat striped">
-                                    <thead><tr><th>Question</th><th>Avg</th></tr></thead>
-                                    <tbody>
-                                        <?php foreach ($ap_labels as $key => $label) : ?>
-                                            <tr><td><?php echo esc_html($label); ?></td><td><strong><?php echo number_format($avg_ap->$key, 2); ?></strong></td></tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                </div>
-            </div>
-
-            <div class="eer-card">
-                <div class="eer-card-header">Standard of Examination (Avg)</div>
-                <div class="eer-card-body">
-                                <?php
-                                $se_questions = get_option('eer_se_questions', [
-                                    'se1' => 'Marking by internal examiners for SOE was as per rating scale',
-                                    'se2' => 'Marking by internal examiners for OSPE was as per rating scale',
-                                    'se3' => 'Marking by internal examiners for Practical examination was logical',
-                                    'se4' => 'Marking by internal examiners for Clinical skill assessment was appropriate'
-                                ]);
-                                ?>
-                                <table class="widefat striped">
-                                    <thead><tr><th>Question</th><th>Avg</th></tr></thead>
-                                    <tbody>
-                                        <?php if ($avg_se) : ?>
-                                            <?php foreach ($se_questions as $key => $label) : ?>
-                                                <tr><td><?php echo esc_html($label); ?></td><td><strong><?php echo number_format($avg_se->$key, 2); ?></strong></td></tr>
-                                            <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                </div>
-            </div>
-
-            <div class="eer-card">
-                <div class="eer-card-header">Overall Performance Distribution</div>
-                <div class="eer-card-body">
-                                <table class="widefat striped">
-                                    <thead><tr><th>Level</th><th>Count</th></tr></thead>
-                                    <tbody>
-                                        <tr><td>Above expectation</td><td><?php echo isset($performance_dist['Above expectation']) ? $performance_dist['Above expectation']->count : 0; ?></td></tr>
-                                        <tr><td>Met expectation</td><td><?php echo isset($performance_dist['Met expectation']) ? $performance_dist['Met expectation']->count : 0; ?></td></tr>
-                                        <tr><td>Below expectation</td><td><?php echo isset($performance_dist['Below expectation']) ? $performance_dist['Below expectation']->count : 0; ?></td></tr>
-                                    </tbody>
-                                </table>
-                </div>
-            </div>
-
-            <div class="eer-card" style="grid-column: 1 / -1;">
-                <div class="eer-card-header">Student Performance Breakdown</div>
-                <div class="eer-card-body">
-                                <table class="widefat striped">
-                                    <thead><tr><th>Domain</th><th>Above</th><th>Met</th><th>Below</th></tr></thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><strong>Knowledge</strong></td>
-                                            <td><?php echo isset($knowledge_dist['Above expectation']) ? $knowledge_dist['Above expectation']->count : 0; ?></td>
-                                            <td><?php echo isset($knowledge_dist['Met expectation']) ? $knowledge_dist['Met expectation']->count : 0; ?></td>
-                                            <td><?php echo isset($knowledge_dist['Below expectation']) ? $knowledge_dist['Below expectation']->count : 0; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Skills</strong></td>
-                                            <td><?php echo isset($skills_dist['Above expectation']) ? $skills_dist['Above expectation']->count : 0; ?></td>
-                                            <td><?php echo isset($skills_dist['Met expectation']) ? $skills_dist['Met expectation']->count : 0; ?></td>
-                                            <td><?php echo isset($skills_dist['Below expectation']) ? $skills_dist['Below expectation']->count : 0; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Attitude</strong></td>
-                                            <td><?php echo isset($attitude_dist['Above expectation']) ? $attitude_dist['Above expectation']->count : 0; ?></td>
-                                            <td><?php echo isset($attitude_dist['Met expectation']) ? $attitude_dist['Met expectation']->count : 0; ?></td>
-                                            <td><?php echo isset($attitude_dist['Below expectation']) ? $attitude_dist['Below expectation']->count : 0; ?></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                </div>
-            </div>
-
-        </div> <!-- End Grid -->
-        <?php endif; ?>
-
-        <h2>All Submitted Reports</h2>
-
-        <!-- Filter Form -->
-        <form method="get" action="" style="margin-bottom: 15px; background: #fff; padding: 10px; border: 1px solid #ccd0d4; box-shadow: 0 1px 1px rgba(0,0,0,.04);">
-            <input type="hidden" name="page" value="eer-reports">
-            <div class="alignleft actions">
-                <select name="filter_subject">
-                    <option value="">All Subjects</option>
-                    <?php foreach ($available_subjects as $subj) : ?>
-                        <option value="<?php echo esc_attr($subj); ?>" <?php selected($filter_subject, $subj); ?>><?php echo esc_html($subj); ?></option>
-                    <?php endforeach; ?>
-                </select>
-
-                <select name="filter_professional">
-                    <option value="">All Professionals</option>
-                    <?php foreach ($available_professionals as $prof) : ?>
-                        <option value="<?php echo esc_attr($prof); ?>" <?php selected($filter_professional, $prof); ?>><?php echo esc_html($prof); ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <input type="submit" class="button" value="Filter Results">
-            </div>
-            <br class="clear">
-        </form>
-
-        <form method="post" action="" style="margin-bottom: 20px;" onsubmit="return confirm('Are you sure you want to delete ALL reports? This action cannot be undone.');">
-            <?php wp_nonce_field('eer_delete_all_reports', 'eer_delete_nonce'); ?>
-            <input type="hidden" name="eer_action" value="delete_all">
-            <input type="submit" class="button button-link-delete" value="Delete All Reports">
-        </form>
-
-        <table class="wp-list-table widefat fixed striped">
-            <thead>
-                <tr>
-                    <th scope="col" class="manage-column column-primary">ID</th>
-                    <th scope="col" class="manage-column">Subject</th>
-                    <th scope="col" class="manage-column">Professional</th>
-                    <th scope="col" class="manage-column">Overall Performance</th>
-                    <th scope="col" class="manage-column">Date Submitted</th>
-                </tr>
-            </thead>
-            <tbody id="the-list">
-                <?php if (!empty($reports)) : ?>
-                    <?php foreach ($reports as $r) : ?>
-                        <tr>
-                            <td class="column-primary" data-colname="ID">
-                                <a href="?page=eer-reports&action=view&report_id=<?php echo $r->id; ?>"><strong><?php echo $r->id; ?></strong></a>
-                                <div class="row-actions">
-                                    <span class="view"><a href="?page=eer-reports&action=view&report_id=<?php echo $r->id; ?>">View Details</a></span>
-                                </div>
-                            </td>
-                            <td data-colname="Subject"><?php echo esc_html($r->subject); ?></td>
-                            <td data-colname="Professional"><?php echo esc_html($r->professional); ?></td>
-                            <td data-colname="Overall Performance"><?php echo esc_html($r->overall_performance); ?></td>
-                            <td data-colname="Date Submitted"><?php echo esc_html($r->submitted_at); ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else : ?>
-                    <tr class="no-items">
-                        <td class="colspanchange" colspan="5">No reports found.</td>
+            <table class="eer-custom-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Teacher Name</th>
+                        <th>Subject</th>
+                        <th>Professional</th>
+                        <th>Overall Performance</th>
+                        <th>Date Submitted</th>
+                        <th>Actions</th>
                     </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="eer-reports-body">
+                    <?php if (!empty($reports)) : ?>
+                        <?php foreach ($reports as $r) : ?>
+                            <tr>
+                                <td>
+                                    <span class="eer-id-column">#<?php echo $r->id; ?></span>
+                                </td>
+                                <td><?php echo esc_html($r->teacher_name); ?></td>
+                                <td><?php echo esc_html($r->subject); ?></td>
+                                <td><?php echo esc_html($r->professional); ?></td>
+                                <td><?php echo esc_html($r->overall_performance); ?></td>
+                                <td><?php echo date_i18n(get_option('date_format'), strtotime($r->submitted_at)); ?></td>
+                                <td>
+                                    <a href="?page=eer-reports&action=view&report_id=<?php echo $r->id; ?>" class="button button-small">View Details</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 30px;">No reports found.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+
+            <script type="text/javascript">
+            jQuery(document).ready(function($) {
+                var searchTimer;
+                $('#eer-search-input, select[name="filter_subject"], select[name="filter_professional"]').on('input change', function() {
+                    clearTimeout(searchTimer);
+                    var search = $('#eer-search-input').val();
+                    var subject = $('select[name="filter_subject"]').val();
+                    var professional = $('select[name="filter_professional"]').val();
+
+                    searchTimer = setTimeout(function() {
+                        $.ajax({
+                            url: ajaxurl,
+                            type: 'POST',
+                            data: {
+                                action: 'eer_live_search',
+                                search: search,
+                                subject: subject,
+                                professional: professional
+                            },
+                            success: function(response) {
+                                $('#eer-reports-body').html(response);
+                            }
+                        });
+                    }, 300);
+                });
+            });
+            </script>
+        </div>
         <?php } ?>
     </div>
 <?php }
