@@ -263,6 +263,37 @@ function eer_admin_page() {
     <div class="wrap">
         <h1>External Examiner Report Dashboard</h1>
 
+        <style>
+            .eer-dashboard-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+                margin: 20px 0;
+            }
+            .eer-card {
+                background: #fff;
+                border: 1px solid #c3c4c7;
+                box-shadow: 0 1px 1px rgba(0,0,0,.04);
+            }
+            .eer-card-header {
+                padding: 12px 15px;
+                border-bottom: 1px solid #c3c4c7;
+                background: #f6f7f7;
+                font-weight: 600;
+                font-size: 14px;
+                color: #1d2327;
+            }
+            .eer-card-body {
+                padding: 15px;
+            }
+            .eer-stat-number {
+                font-size: 2rem;
+                font-weight: 600;
+                color: #2271b1;
+                margin-bottom: 0.5rem;
+            }
+        </style>
+
         <h2 class="nav-tab-wrapper">
             <a href="?page=eer-reports&tab=dashboard" class="nav-tab <?php echo $active_tab === 'dashboard' ? 'nav-tab-active' : ''; ?>">Dashboard</a>
             <a href="?page=eer-reports&tab=settings" class="nav-tab <?php echo $active_tab === 'settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
@@ -288,14 +319,13 @@ function eer_admin_page() {
         ?>
 
         <?php if ($total_reports > 0) : ?>
-        <div id="dashboard-widgets-wrap">
-            <div id="dashboard-widgets" class="metabox-holder">
-                <div class="postbox-container" style="width:100%">
-                    <div class="meta-box-sortables">
-                        <div class="postbox">
-                            <h2 class="hndle"><span>Summary</span></h2>
-                            <div class="inside">
-                                <p><strong>Total Reports:</strong> <?php echo $total_reports; ?></p>
+        <div class="eer-dashboard-grid">
+            
+            <div class="eer-card">
+                <div class="eer-card-header">Summary Overview</div>
+                <div class="eer-card-body">
+                    <div class="eer-stat-number"><?php echo $total_reports; ?></div>
+                    <p style="margin-top:0; color:#646970;">Total Reports Submitted</p>
                                 <h4>Reports by Subject:</h4>
                                 <table class="widefat striped">
                                     <thead><tr><th>Subject</th><th>Count</th></tr></thead>
@@ -309,29 +339,34 @@ function eer_admin_page() {
                                         <?php endif; ?>
                                     </tbody>
                                 </table>
-                                <br>
-                                <h4>Average Formative Assessment Ratings (out of 5):</h4>
-                                <?php
-                                $questions = get_option('eer_fa_questions', [
-                                    'fa1' => 'Formative assessment procedures were satisfactory',
-                                    'fa2' => 'Records of formative assessment were adequate',
-                                    'fa3' => 'Question papers and scripts were available',
-                                    'fa4' => 'Opportunity to scrutinize scripts was given'
-                                ]);
-                                ?>
-                                <table class="widefat striped">
-                                    <thead><tr><th>Question</th><th>Avg Score</th></tr></thead>
-                                    <tbody>
-                                        <?php foreach ($questions as $key => $label) : ?>
-                                            <tr><td><?php echo esc_html($label); ?></td><td><strong><?php echo number_format($avg_ratings->$key, 2); ?></strong></td></tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="postbox">
-                            <h2 class="hndle"><span>Assessment Process Quality (Avg)</span></h2>
-                            <div class="inside">
+                </div>
+            </div>
+
+            <div class="eer-card">
+                <div class="eer-card-header">Formative Assessment (Avg Score)</div>
+                <div class="eer-card-body">
+                    <?php
+                    $questions = get_option('eer_fa_questions', [
+                        'fa1' => 'Formative assessment procedures were satisfactory',
+                        'fa2' => 'Records of formative assessment were adequate',
+                        'fa3' => 'Question papers and scripts were available',
+                        'fa4' => 'Opportunity to scrutinize scripts was given'
+                    ]);
+                    ?>
+                    <table class="widefat striped">
+                        <thead><tr><th>Question</th><th>Avg</th></tr></thead>
+                        <tbody>
+                            <?php foreach ($questions as $key => $label) : ?>
+                                <tr><td><?php echo esc_html($label); ?></td><td><strong><?php echo number_format($avg_ratings->$key, 2); ?></strong></td></tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="eer-card">
+                <div class="eer-card-header">Assessment Process Quality (Avg)</div>
+                <div class="eer-card-body">
                                 <?php
                                 $ap_questions_opt = get_option('eer_ap_questions', [
                                     'ospe_quality' => 'Quality of OSPE/OSCE',
@@ -347,18 +382,19 @@ function eer_admin_page() {
                                 ];
                                 ?>
                                 <table class="widefat striped">
-                                    <thead><tr><th>Question</th><th>Avg Score</th></tr></thead>
+                                    <thead><tr><th>Question</th><th>Avg</th></tr></thead>
                                     <tbody>
                                         <?php foreach ($ap_labels as $key => $label) : ?>
                                             <tr><td><?php echo esc_html($label); ?></td><td><strong><?php echo number_format($avg_ap->$key, 2); ?></strong></td></tr>
                                         <?php endforeach; ?>
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-                        <div class="postbox">
-                            <h2 class="hndle"><span>Standard of Examination (Avg)</span></h2>
-                            <div class="inside">
+                </div>
+            </div>
+
+            <div class="eer-card">
+                <div class="eer-card-header">Standard of Examination (Avg)</div>
+                <div class="eer-card-body">
                                 <?php
                                 $se_questions = get_option('eer_se_questions', [
                                     'se1' => 'Marking by internal examiners for SOE was as per rating scale',
@@ -368,7 +404,7 @@ function eer_admin_page() {
                                 ]);
                                 ?>
                                 <table class="widefat striped">
-                                    <thead><tr><th>Question</th><th>Avg Score</th></tr></thead>
+                                    <thead><tr><th>Question</th><th>Avg</th></tr></thead>
                                     <tbody>
                                         <?php if ($avg_se) : ?>
                                             <?php foreach ($se_questions as $key => $label) : ?>
@@ -377,11 +413,12 @@ function eer_admin_page() {
                                         <?php endif; ?>
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-                        <div class="postbox">
-                            <h2 class="hndle"><span>Overall Performance Distribution</span></h2>
-                            <div class="inside">
+                </div>
+            </div>
+
+            <div class="eer-card">
+                <div class="eer-card-header">Overall Performance Distribution</div>
+                <div class="eer-card-body">
                                 <table class="widefat striped">
                                     <thead><tr><th>Level</th><th>Count</th></tr></thead>
                                     <tbody>
@@ -390,11 +427,12 @@ function eer_admin_page() {
                                         <tr><td>Below expectation</td><td><?php echo isset($performance_dist['Below expectation']) ? $performance_dist['Below expectation']->count : 0; ?></td></tr>
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-                        <div class="postbox">
-                            <h2 class="hndle"><span>Student Performance Breakdown</span></h2>
-                            <div class="inside">
+                </div>
+            </div>
+
+            <div class="eer-card" style="grid-column: 1 / -1;">
+                <div class="eer-card-header">Student Performance Breakdown</div>
+                <div class="eer-card-body">
                                 <table class="widefat striped">
                                     <thead><tr><th>Domain</th><th>Above</th><th>Met</th><th>Below</th></tr></thead>
                                     <tbody>
@@ -418,12 +456,10 @@ function eer_admin_page() {
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
-        </div>
+
+        </div> <!-- End Grid -->
         <?php endif; ?>
 
         <h2>All Submitted Reports</h2>
