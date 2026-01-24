@@ -19,7 +19,7 @@ function eer_display_single_report($report) {
     <div class="wrap">
         <h1>Report Details (ID: <?php echo $report->id; ?>)</h1>
         <a href="?page=eer-reports" class="button">&larr; Back to Dashboard</a>
-        <button id="eer-download-pdf" class="button button-primary">Download PDF</button>
+        <button id="eer-download-pdf" class="button">Download This Report</button>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
         <script>
@@ -330,71 +330,6 @@ function eer_admin_page() {
 
     <div class="wrap">
         <h1>External Examiner Report Dashboard</h1>
-
-        <style>
-            .eer-reports-card {
-                background: #fff;
-                border: 1px solid #c3c4c7;
-                box-shadow: 0 1px 1px rgba(0,0,0,.04);
-                margin-top: 20px;
-            }
-            .eer-reports-header {
-                padding: 15px 20px;
-                border-bottom: 1px solid #c3c4c7;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                background: #f6f7f7;
-            }
-            .eer-reports-title {
-                margin: 0;
-                font-size: 16px;
-                font-weight: 600;
-                color: #1d2327;
-            }
-            .eer-filter-bar {
-                padding: 15px 20px;
-                border-bottom: 1px solid #eaecf0;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-            .eer-filter-group {
-                display: flex;
-                gap: 10px;
-                align-items: center;
-            }
-            .eer-custom-table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            .eer-custom-table th {
-                text-align: left;
-                padding: 12px 20px;
-                font-weight: 600;
-                color: #646970;
-                border-bottom: 1px solid #c3c4c7;
-                background: #fff;
-            }
-            .eer-custom-table td {
-                padding: 12px 20px;
-                border-bottom: 1px solid #f0f0f1;
-                color: #3c434a;
-                vertical-align: middle;
-            }
-            .eer-custom-table tr:last-child td {
-                border-bottom: none;
-            }
-            .eer-custom-table tr:hover td {
-                background: #f6f7f7;
-            }
-            .eer-id-column {
-                font-weight: bold;
-                color: #2271b1;
-            }
-        </style>
 
         <h2 class="nav-tab-wrapper">
             <a href="?page=eer-reports&tab=dashboard" class="nav-tab <?php echo $active_tab === 'dashboard' ? 'nav-tab-active' : ''; ?>">Dashboard</a>

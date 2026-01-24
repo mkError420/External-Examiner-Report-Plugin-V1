@@ -41,4 +41,15 @@ function eer_admin_menu() {
     );
 }
 
+/* Enqueue admin styles */
+add_action('admin_enqueue_scripts', 'eer_enqueue_admin_styles');
+
+function eer_enqueue_admin_styles($hook) {
+    // Only load on the reports page
+    if (strpos($hook, 'eer-reports') === false) {
+        return;
+    }
+    wp_enqueue_style('eer-admin-style', EER_URL . 'assets/css/style.css');
+}
+
 add_action('wp_ajax_eer_live_search', 'eer_live_search_callback');
