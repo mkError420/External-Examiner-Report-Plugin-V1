@@ -2,7 +2,7 @@
 /**
  * Plugin Name: External Examiner Report
  * Description: Digital External Examiner Report Form for Medical Colleges
- * Version: 1.10
+ * Version: 02.10
  * Author: Mk. Rabbani(Website Manager RCMCH)
  */
 

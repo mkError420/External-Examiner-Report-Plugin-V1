@@ -16,11 +16,80 @@ if (!function_exists('eer_get_rating_label')) {
 
 function eer_display_single_report($report) {
     ?>
-    <div class="wrap">
-        <h1>Report Details (ID: <?php echo $report->id; ?>)</h1>
-        <a href="?page=eer-reports" class="button">&larr; Back to Dashboard</a>
-        <button id="eer-download-pdf" class="button">Download This Report</button>
+    <div class="wrap eer-report-details-wrap">
+        <div class="eer-report-actions">
+            <h1>Report Details</h1>
+            <div>
+                <a href="?page=eer-reports" class="button">&larr; Back to Dashboard</a>
+                <button id="eer-download-pdf" class="button button-primary">Download This Report</button>
+            </div>
+        </div>
 
+        <style>
+            /* Note: For best practice, these styles should be moved to a separate CSS file. */
+            .eer-report-details-wrap {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            }
+            .eer-report-actions {
+                margin-bottom: 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            #eer-report-content {
+                background: #fff;
+                border: 1px solid #e0e0e0;
+                padding: 20px 40px 40px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+                border-radius: 8px;
+            }
+            .eer-report-header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding-bottom: 20px;
+                border-bottom: 2px solid #070d5f;
+            }
+            .eer-report-header h2 {
+                font-size: 1.8em;
+                font-weight: 600;
+                color: #070d5f;
+                margin: 0 0 5px 0;
+            }
+            .eer-report-header p {
+                font-size: 1.1em;
+                color: #555;
+                margin: 0;
+            }
+            .eer-report-section {
+                margin-bottom: 25px;
+                border: 1px solid #e5e5e5;
+                border-radius: 5px;
+                overflow: hidden;
+            }
+            .eer-report-section-title {
+                background: #f9f9f9;
+                padding: 15px 20px;
+                border-bottom: 1px solid #e5e5e5;
+                font-size: 1.2em;
+                font-weight: 600;
+                color: #23282d;
+                margin: 0;
+            }
+            .eer-report-section-content {
+                padding: 20px;
+            }
+            .eer-comment-box {
+                background: #fdfdfd;
+                border: 1px solid #e5e5e5;
+                padding: 15px;
+                border-radius: 4px;
+                margin-top: 10px;
+                line-height: 1.6;
+            }
+        </style>
+        
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
         <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -39,12 +108,15 @@ function eer_display_single_report($report) {
         });
         </script>
 
-        <div id="poststuff" style="margin-top: 20px;">
-            <div id="eer-report-content">
-            <h2 style="text-align: center; margin-bottom: 0; background: #070d5f; border: 1px solid #070d5f; border-radius: 5px; color: #fff;padding: 5px;color: #c8cfd6;">Rangpur Community Medical College Hospital (RCMCH) </h2>
-            <div class="postbox">
-                <h2 class="hndle"><span>General Information</span></h2>
-                <div class="inside">
+        <div id="eer-report-content">
+            <div class="eer-report-header">
+                <h2>Rangpur Community Medical College Hospital (RCMCH)</h2>
+                <p>External Examiner's Report (ID: <?php echo $report->id; ?>)</p>
+            </div>
+
+            <div class="eer-report-section">
+                <h3 class="eer-report-section-title">General Information</h3>
+                <div class="eer-report-section-content">
                     <table class="widefat striped">
                         <tbody>
                             <tr>
@@ -52,7 +124,7 @@ function eer_display_single_report($report) {
                                 <td><?php echo esc_html($report->teacher_name); ?></td>
                             </tr>
                             <tr>
-                                <td style="width: 200px;"><strong>Subject</strong></td>
+                                <td><strong>Subject</strong></td>
                                 <td><?php echo esc_html($report->subject); ?></td>
                             </tr>
                             <tr>
@@ -84,10 +156,10 @@ function eer_display_single_report($report) {
                 'fa4' => 'Opportunity to scrutinize scripts was given'
             ]);
             ?>
-            <div class="postbox">
-                <h2 class="hndle"><span>(1) Assessment Process</span></h2>
-                <h3 class="hndle"><span>(a) Formative assessment procedures were satisfactory (All terms & card exam):</span></h3>
-                <div class="inside">
+            <div class="eer-report-section">
+                <h3 class="eer-report-section-title">(1) Assessment Process</h3>
+                <div class="eer-report-section-content">
+                    <h4>(a) Formative assessment procedures were satisfactory (All terms & card exam):</h4>
                     <table class="widefat striped">
                         <thead>
                             <tr>
@@ -105,8 +177,8 @@ function eer_display_single_report($report) {
                         </tbody>
                     </table>
                     <br>
-                    <p><strong>Formative Assessment can be further Improved by:</strong></p>
-                    <div style="background: #fff; border: 1px solid #ccd0d4; padding: 10px;"><?php echo nl2br(esc_html($report->fa_improvement)); ?></div>
+                    <p><strong>Further improvements for Formative Assessment:</strong></p>
+                    <div class="eer-comment-box"><?php echo nl2br(esc_html($report->fa_improvement)); ?></div>
                 </div>
             </div>
 
@@ -116,9 +188,9 @@ function eer_display_single_report($report) {
                 'practical_quality' => 'Quality of Practical practical assessment was appropriate',
                 'soe_quality' => 'Quality of structured oral examination was appropriate'
             ]); ?>
-            <div class="postbox">
-                <h2 class="hndle"><span>(b) Quality of Summative Assessments (Professional Examination):</span></h2>
-                <div class="inside">
+            <div class="eer-report-section">
+                <h3 class="eer-report-section-title">(b) Quality of Summative Assessments (Professional Examination)</h3>
+                <div class="eer-report-section-content">
                     <table class="widefat striped">
                         <thead>
                             <tr>
@@ -136,8 +208,8 @@ function eer_display_single_report($report) {
                         </tbody>
                     </table>
                     <br>
-                    <p><strong>The quality of SOE, OSPE, Traditional Practical, Clinical skill assessment can be further improved by:</strong></p>
-                    <div style="background: #fff; border: 1px solid #ccd0d4; padding: 10px;"><?php echo nl2br(esc_html($report->ap_improvement)); ?></div>
+                    <p><strong>Further improvements for Summative Assessments:</strong></p>
+                    <div class="eer-comment-box"><?php echo nl2br(esc_html($report->ap_improvement)); ?></div>
                 </div>
             </div>
 
@@ -147,9 +219,9 @@ function eer_display_single_report($report) {
                 'se3' => 'Marking by internal examiners for Practical examination was logical',
                 'se4' => 'Marking by internal examiners for Clinical skill assessment was appropriate'
             ]); ?>
-            <div class="postbox">
-                <h2 class="hndle"><span>(c) Marking by internal examiner in professional examination:</span></h2>
-                <div class="inside">
+            <div class="eer-report-section">
+                <h3 class="eer-report-section-title">(c) Marking by internal examiner in professional examination</h3>
+                <div class="eer-report-section-content">
                     <table class="widefat striped">
                         <thead>
                             <tr>
@@ -166,16 +238,13 @@ function eer_display_single_report($report) {
                             <?php endif; endforeach; ?>
                         </tbody>
                     </table>
-                    <br>
-                    
                 </div>
             </div>
 
-            <div class="postbox">
-                <h2 class="hndle"><strong>(2) Student Performance (During Professional Examination/Summative Exam)</strong></h2>
-                <h3 class="hndle"><strong>(a) Quality of learning outcomes:</strong></h3>
-                
-                <div class="inside">
+            <div class="eer-report-section">
+                <h3 class="eer-report-section-title">(2) Student Performance (During Professional Examination/Summative Exam)</h3>
+                <div class="eer-report-section-content">
+                    <h4>(a) Quality of learning outcomes:</h4>
                     <table class="widefat striped">
                         <thead>
                             <tr>
@@ -198,26 +267,24 @@ function eer_display_single_report($report) {
                             </tr>
                         </tbody>
                     </table>
-                </div>
-            </div>
-
-            <div class="postbox">
-                <h3 class="hndle"><span>(b) Overall, the performance of the students in relation to students of other Medical Colleges:</span></h3>
-                <div class="inside">
+                    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+                    <h4>(b) Overall, the performance of the students in relation to students of other Medical Colleges:</h4>
                     <table class="widefat striped">
                         <tbody>
                             <tr>
-                                <td style="width: 200px;"><strong>Overall Performance</strong></td>
+                                <td><strong>Overall Performance</strong></td>
                                 <td><?php echo esc_html($report->overall_performance); ?></td>
                             </tr>
                         </tbody>
                     </table>
-                    <br>
-                    <p><strong>(3) Overall comments (Assessment process, Formative & Summative examination) & suggestions:</strong></p>
-                    <div style="background: #fff; border: 1px solid #ccd0d4; padding: 10px;"><?php echo nl2br(esc_html($report->overall_comments)); ?></div>
                 </div>
             </div>
 
+            <div class="eer-report-section">
+                <h3 class="eer-report-section-title">(3) Overall comments & suggestions</h3>
+                <div class="eer-report-section-content">
+                    <div class="eer-comment-box"><?php echo nl2br(esc_html($report->overall_comments)); ?></div>
+                </div>
             </div>
         </div>
     </div>
