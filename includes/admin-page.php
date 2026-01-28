@@ -38,6 +38,9 @@ function eer_display_single_report($report) {
                 flex-wrap: wrap;
                 gap: 15px;
             }
+            .eer-report-actions h1 {
+                color: #070d5f;
+            }
             #eer-report-content {
                 background: #fff;
                 border: 1px solid #e0e0e0;
@@ -67,26 +70,41 @@ function eer_display_single_report($report) {
                 border: 1px solid #e5e5e5;
                 border-radius: 5px;
                 overflow: hidden;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
             }
             .eer-report-section-title {
-                background: #f9f9f9;
+                background: #070d5f;
                 padding: 15px 20px;
-                border-bottom: 1px solid #e5e5e5;
+                border-bottom: 1px solid #070d5f;
                 font-size: 1.2em;
                 font-weight: 600;
-                color: #23282d;
+                color: #fff;
                 margin: 0;
             }
             .eer-report-section-content {
                 padding: 20px;
             }
+            .eer-report-section:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            }
+            .eer-report-section-content tr:hover td {
+                background-color: #eef6fc !important;
+            }
             .eer-comment-box {
-                background: #fdfdfd;
-                border: 1px solid #e5e5e5;
-                padding: 15px;
+                background: #f8f9fa;
+                border: 1px solid #e0e0e0;
+                border-left: 5px solid #070d5f;
+                padding: 15px 20px;
                 border-radius: 4px;
                 margin-top: 10px;
                 line-height: 1.6;
+                box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+                transition: all 0.3s ease;
+            }
+            .eer-comment-box:hover {
+                background: #fff;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             }
         </style>
         
