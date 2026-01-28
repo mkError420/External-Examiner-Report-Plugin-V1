@@ -50,6 +50,11 @@ function eer_enqueue_admin_styles($hook) {
         return;
     }
     wp_enqueue_style('eer-admin-style', EER_URL . 'assets/css/style.css');
+
+    // For media uploader on settings tab
+    if (isset($_GET['tab']) && $_GET['tab'] === 'settings') {
+        wp_enqueue_media();
+    }
 }
 
 add_action('wp_ajax_eer_live_search', 'eer_live_search_callback');

@@ -233,6 +233,15 @@
 <?php endif; ?>
 
 <div class="eer-form-wrapper">
+    <?php
+    $logo_url = get_option('eer_logo_url');
+    if ($logo_url) :
+    ?>
+    <div style="text-align: center; margin-bottom: 15px;">
+        <img src="<?php echo esc_url($logo_url); ?>" alt="Institution Logo" style="max-height: 100px; width: auto;">
+    </div>
+    <?php endif; ?>
+
 <form method="post">
     <?php wp_nonce_field('eer_submit_form', 'eer_nonce'); ?>
 
@@ -251,14 +260,13 @@
             <?php
             $subjects_opt = get_option('eer_subjects');
             $subjects = $subjects_opt ? array_map('trim', explode("\n", $subjects_opt)) : [];
-            $active_subject = get_option('eer_active_subject', '');
             ?>
             <label>Subject <span class="eer-required">*</span></label>
             <?php if (!empty($subjects)) : ?>
                 <select name="subject" required>
                     <option value="">Select Subject</option>
                     <?php foreach ($subjects as $subject) : ?>
-                        <option <?php selected($active_subject, $subject); ?>><?php echo esc_html($subject); ?></option>
+                        <option><?php echo esc_html($subject); ?></option>
                     <?php endforeach; ?>
                 </select>
             <?php else: ?>
@@ -270,13 +278,12 @@
             <?php
             $professionals_opt = get_option('eer_professionals', "First\nSecond\nThird\nFinal");
             $professionals = array_map('trim', explode("\n", $professionals_opt));
-            $active_prof = get_option('eer_active_professional', '');
             ?>
             <label>Professional <span class="eer-required">*</span></label>
             <select name="professional" required>
                 <option value="">Select Here</option>
                 <?php foreach ($professionals as $prof) : ?>
-                    <option <?php selected($active_prof, $prof); ?>><?php echo esc_html($prof); ?></option>
+                    <option><?php echo esc_html($prof); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -285,15 +292,15 @@
     <div class="eer-input-row">
         <div class="eer-form-group">
             <label>Period of examination <span class="eer-required">*</span></label>
-            <input type="text" name="exam_period" value="<?php echo esc_attr(get_option('eer_active_period')); ?>" placeholder="e.g. May 2023" required>
+            <input type="text" name="exam_period" placeholder="e.g. May 2023" required>
         </div>
         <div class="eer-form-group">
             <label>Start Date <span class="eer-required">*</span></label>
-            <input type="date" name="start_date" value="<?php echo esc_attr(get_option('eer_active_start')); ?>" required>
+            <input type="date" name="start_date" required>
         </div>
         <div class="eer-form-group">
             <label>End Date <span class="eer-required">*</span></label>
-            <input type="date" name="end_date" value="<?php echo esc_attr(get_option('eer_active_end')); ?>" required>
+            <input type="date" name="end_date" required>
         </div>
     </div>
 
@@ -381,7 +388,10 @@
     }
     ?>
 
-    
+    <div class="eer-form-group" style="margin-top: 15px;">
+        <label>Marking by internal examiner can be further improved by: <span class="eer-required">*</span></label>
+        <textarea name="se_improvement" required></textarea>
+    </div>
 
     <?php
     $levels_opt = get_option('eer_performance_levels', "Below expectation\nMet expectation\nAbove expectation");

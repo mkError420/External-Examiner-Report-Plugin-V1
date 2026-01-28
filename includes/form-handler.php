@@ -111,6 +111,10 @@ function eer_handle_admin_actions() {
             wp_die('Unauthorized');
         }
 
+        if (isset($_POST['eer_logo_url'])) {
+            update_option('eer_logo_url', esc_url_raw($_POST['eer_logo_url']));
+        }
+
         if (isset($_POST['eer_subjects'])) {
             update_option('eer_subjects', sanitize_textarea_field($_POST['eer_subjects']));
         }
@@ -134,13 +138,6 @@ function eer_handle_admin_actions() {
         if (isset($_POST['eer_performance_levels'])) {
             update_option('eer_performance_levels', sanitize_textarea_field($_POST['eer_performance_levels']));
         }
-
-        // Save Active Exam Details
-        if (isset($_POST['eer_active_subject'])) update_option('eer_active_subject', sanitize_text_field($_POST['eer_active_subject']));
-        if (isset($_POST['eer_active_professional'])) update_option('eer_active_professional', sanitize_text_field($_POST['eer_active_professional']));
-        if (isset($_POST['eer_active_period'])) update_option('eer_active_period', sanitize_text_field($_POST['eer_active_period']));
-        if (isset($_POST['eer_active_start'])) update_option('eer_active_start', sanitize_text_field($_POST['eer_active_start']));
-        if (isset($_POST['eer_active_end'])) update_option('eer_active_end', sanitize_text_field($_POST['eer_active_end']));
 
         $redirect_url = add_query_arg('settings-updated', 'true', $_SERVER['REQUEST_URI']);
         wp_redirect($redirect_url);

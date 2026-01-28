@@ -127,6 +127,15 @@ function eer_display_single_report($report) {
         </script>
 
         <div id="eer-report-content">
+            <?php
+            $logo_url = get_option('eer_logo_url');
+            if ($logo_url) :
+            ?>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <img src="<?php echo esc_url($logo_url); ?>" alt="Institution Logo" style="max-height: 100px; width: auto;">
+            </div>
+            <?php endif; ?>
+
             <div class="eer-report-header">
                 <h2>Rangpur Community Medical College Hospital (RCMCH)</h2>
                 <p>External Examiner's Report (ID: <?php echo $report->id; ?>)</p>
@@ -446,11 +455,37 @@ function eer_admin_page() {
         
         if ($active_tab === 'settings') {
             ?>
-            <div class="card" style="max-width: 100%; margin-top: 20px; padding: 20px;">
-                <h3>Shortcode</h3>
-                <p>Use this shortcode to display the form on any page:</p>
-                <p><input type="text" value="[external_examiner_report]" class="large-text" readonly onclick="this.select();"></p>
-            </div>
+            <form method="post" action="">
+                <input type="hidden" name="eer_action" value="save_settings">
+                <?php wp_nonce_field('eer_save_settings', 'eer_settings_nonce'); ?>
+
+                <div class="card" style="max-width: 100%; margin-top: 20px;">
+                    <h2 style="padding: 15px 20px; margin: 0; border-bottom: 1px solid #eee;">General Settings</h2>
+                    <div style="padding: 20px;">
+                        <h3>Shortcode</h3>
+                        <p>Use this shortcode to display the form on any page:</p>
+                        <p><input type="text" value="[external_examiner_report]" class="large-text" readonly onclick="this.select();"></p>
+                        
+                        <hr style="margin: 20px 0;">
+
+                        <h3>Logo</h3>
+                        <p>Upload a logo (PNG, JPG, SVG) to display on the form and PDF reports. Recommended max height: 100px.</p>
+                        <?php $logo_url = get_option('eer_logo_url'); ?>
+                        <div id="eer-logo-preview" style="margin-bottom: 15px; min-height: 50px; padding: 10px; border: 1px dashed #ddd; background: #fafafa; border-radius: 4px;">
+                            <?php if ($logo_url): ?>
+                                <img src="<?php echo esc_url($logo_url); ?>" style="max-width: 200px; max-height: 100px;">
+                            <?php else: ?>
+                                <span style="color: #888;">No logo selected</span>
+                            <?php endif; ?>
+                        </div>
+                        <input type="hidden" name="eer_logo_url" id="eer_logo_url" value="<?php echo esc_attr($logo_url); ?>">
+                        <button type="button" class="button" id="eer-upload-logo-btn">Upload/Change Logo</button>
+                        <button type="button" class="button" id="eer-remove-logo-btn" style="<?php echo $logo_url ? '' : 'display:none;'; ?>">Remove Logo</button>
+                    </div>
+                </div>
+
+                <?php submit_button('Save All Settings'); ?>
+            </form>
             <?php
         } else {
         ?>
@@ -534,39 +569,70 @@ function eer_admin_page() {
             </table>
             </form>
 
-            <script type="text/javascript">
-            jQuery(document).ready(function($) {
-                var searchTimer;
-                $('#eer-search-input, select[name="filter_subject"], select[name="filter_professional"]').on('input change', function() {
-                    clearTimeout(searchTimer);
-                    var search = $('#eer-search-input').val();
-                    var subject = $('select[name="filter_subject"]').val();
-                    var professional = $('select[name="filter_professional"]').val();
-
-                    searchTimer = setTimeout(function() {
-                        $.ajax({
-                            url: ajaxurl,
-                            type: 'POST',
-                            data: {
-                                action: 'eer_live_search',
-                                search: search,
-                                subject: subject,
-                                professional: professional
-                            },
-                            success: function(response) {
-                                $('#eer-reports-body').html(response);
-                            }
-                        });
-                    }, 300);
-                });
-
-                // Select All checkbox
-                $('#cb-select-all-1').on('click', function() {
-                    $('input[name="report_ids[]"]').prop('checked', this.checked);
-                });
-            });
-            </script>
         </div>
         <?php } ?>
+
+        <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            // This script block is now outside the if/else, so it runs on both tabs.
+            // The event handlers will only attach to elements that exist on the current page.
+
+            // Dashboard: Live Search
+            var searchTimer;
+            $('#eer-search-input, select[name="filter_subject"], select[name="filter_professional"]').on('input change', function() {
+                clearTimeout(searchTimer);
+                var search = $('#eer-search-input').val();
+                var subject = $('select[name="filter_subject"]').val();
+                var professional = $('select[name="filter_professional"]').val();
+
+                searchTimer = setTimeout(function() {
+                    $.ajax({
+                        url: ajaxurl,
+                        type: 'POST',
+                        data: {
+                            action: 'eer_live_search',
+                            search: search,
+                            subject: subject,
+                            professional: professional
+                        },
+                        success: function(response) {
+                            $('#eer-reports-body').html(response);
+                        }
+                    });
+                }, 300);
+            });
+
+            // Dashboard: Select All checkbox
+            $('#cb-select-all-1').on('click', function() {
+                $('input[name="report_ids[]"]').prop('checked', this.checked);
+            });
+
+            // Settings: Media Uploader for Logo
+            var mediaUploader;
+            $('#eer-upload-logo-btn').click(function(e) {
+                e.preventDefault();
+                if (mediaUploader) { mediaUploader.open(); return; }
+                mediaUploader = wp.media.frames.file_frame = wp.media({
+                    title: 'Choose Logo',
+                    button: { text: 'Choose Logo' },
+                    library: { type: [ 'image/jpeg', 'image/png', 'image/svg+xml' ] },
+                    multiple: false
+                });
+                mediaUploader.on('select', function() {
+                    var attachment = mediaUploader.state().get('selection').first().toJSON();
+                    $('#eer_logo_url').val(attachment.url);
+                    $('#eer-logo-preview').html('<img src="' + attachment.url + '" style="max-width: 200px; max-height: 100px;">');
+                    $('#eer-remove-logo-btn').show();
+                });
+                mediaUploader.open();
+            });
+            $('#eer-remove-logo-btn').click(function(e) {
+                e.preventDefault();
+                $('#eer_logo_url').val('');
+                $('#eer-logo-preview').html('<span style="color: #888;">No logo selected</span>');
+                $(this).hide();
+            });
+        });
+        </script>
     </div>
 <?php }
