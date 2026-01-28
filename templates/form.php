@@ -381,6 +381,8 @@
     }
     ?>
 
+    
+
     <?php
     $levels_opt = get_option('eer_performance_levels', "Below expectation\nMet expectation\nAbove expectation");
     $levels = array_map('trim', explode("\n", $levels_opt));

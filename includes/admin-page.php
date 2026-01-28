@@ -77,7 +77,12 @@ function eer_display_single_report($report) {
             </div>
 
             <?php
-            $fa_questions = get_option('eer_fa_questions', []);
+            $fa_questions = get_option('eer_fa_questions', [
+                'fa1' => 'Formative assessment procedures were satisfactory',
+                'fa2' => 'Records of formative assessment were adequate',
+                'fa3' => 'Question papers and scripts were available',
+                'fa4' => 'Opportunity to scrutinize scripts was given'
+            ]);
             ?>
             <div class="postbox">
                 <h2 class="hndle"><span>(1) Assessment Process</span></h2>
@@ -105,7 +110,12 @@ function eer_display_single_report($report) {
                 </div>
             </div>
 
-            <?php $ap_questions = get_option('eer_ap_questions', []); ?>
+            <?php $ap_questions = get_option('eer_ap_questions', [
+                'ospe_quality' => 'Quality of OSPE was appropriate',
+                'clinical_quality' => 'Quality of Clinical skill assessment was appropriate',
+                'practical_quality' => 'Quality of Practical practical assessment was appropriate',
+                'soe_quality' => 'Quality of structured oral examination was appropriate'
+            ]); ?>
             <div class="postbox">
                 <h2 class="hndle"><span>(b) Quality of Summative Assessments (Professional Examination):</span></h2>
                 <div class="inside">
@@ -131,7 +141,12 @@ function eer_display_single_report($report) {
                 </div>
             </div>
 
-            <?php $se_questions = get_option('eer_se_questions', []); ?>
+            <?php $se_questions = get_option('eer_se_questions', [
+                'se1' => 'Marking by internal examiners for SOE was as per rating scale',
+                'se2' => 'Marking by internal examiners for OSPE was as per rating scale',
+                'se3' => 'Marking by internal examiners for Practical examination was logical',
+                'se4' => 'Marking by internal examiners for Clinical skill assessment was appropriate'
+            ]); ?>
             <div class="postbox">
                 <h2 class="hndle"><span>(c) Marking by internal examiner in professional examination:</span></h2>
                 <div class="inside">
